@@ -185,20 +185,20 @@ class MultiUser
 		$xml->addChild('USR', $NUSR);
 		$xml->addChild('PWD', $NPASSWD);
 		$xml->addChild('EMAIL', $_POST['useremail']);
-		$xml->addChild('HTMLEDITOR', $_POST['usereditor']);
+		$xml->addChild('HTMLEDITOR', (isset($_POST['usereditor'])? $_POST['usereditor'] : "") );
 		$xml->addChild('TIMEZONE', $_POST['ntimezone']);
 		$xml->addChild('LANG', $_POST['userlng']);
 		$perm = $xml->addChild('PERMISSIONS');
-		$perm->addChild('PAGES', $_POST['Pages']);
-		$perm->addChild('FILES', $_POST['Files']);
-		$perm->addChild('THEME', $_POST['Theme']);
-		$perm->addChild('PLUGINS', $_POST['Plugins']);
-		$perm->addChild('BACKUPS', $_POST['Backups']);
-		$perm->addChild('SETTINGS', $_POST['Settings']);
-		$perm->addChild('SUPPORT', $_POST['Support']);
-		$perm->addChild('EDIT', $_POST['Edit']);
+		$perm->addChild('PAGES', (isset($_POST['Pages'])? $_POST['Pages'] : "") );
+		$perm->addChild('FILES', (isset($_POST['Files'])? $_POST['Files'] : "") );
+		$perm->addChild('THEME', (isset($_POST['Theme'])? $_POST['Theme'] : "") );
+		$perm->addChild('PLUGINS', (isset($_POST['Plugins'])? $_POST['Plugins'] : "") );
+		$perm->addChild('BACKUPS', (isset($_POST['Backups'])? $_POST['Backups'] : "") );
+		$perm->addChild('SETTINGS', (isset($_POST['Settings'])? $_POST['Settings'] : "") );
+		$perm->addChild('SUPPORT', (isset($_POST['Support'])? $_POST['Support'] : "") );
+		$perm->addChild('EDIT', (isset($_POST['Edit'])? $_POST['Edit'] : "") );
 		$perm->addChild('LANDING', $_POST['Landing']);
-		$perm->addChild('ADMIN', $_POST['Admin']);
+		$perm->addChild('ADMIN', (isset($_POST['Admin'])? $_POST['Admin'] : ""));
 		if (! XMLsave($xml, GSUSERSPATH . $usrfile) ) {
 		$error = i18n_r('CHMOD_ERROR');
 		}
