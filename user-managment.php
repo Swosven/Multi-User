@@ -730,7 +730,7 @@ class MultiUser
 		}
 		  if ($this->mmUserFile('SETTINGS') == "no") {
 			  $settings_menu = ".settings {display:none !important;}";
-			  $settings_footer = "$(\"a\").remove(\":contains('General Settings')\");"; // ###
+			  $settings_footer = "$(\"a\").remove(\":contains('". i18n_r(THISFILE_UM.'/GENERAL_SETTINGS') ."')\");"; // ### General Settings
 		  }
 				else {
 				   $settings_menu ="";
@@ -748,7 +748,7 @@ class MultiUser
 		}
 		  if ($this->mmUserFile('BACKUPS') == "no") {
 			  $backups_menu = ".backups {display:none !important;}";
-			  $backups_footer = "$(\"a\").remove(\":contains('Backup Management')\");"; // ###
+			  $backups_footer = "$(\"a\").remove(\":contains('". i18n_r(THISFILE_UM.'/BAK_MANAGEMENT') ."')\");"; // ### Backup Management
 		  }
 				else {
 				   $backups_menu ="";
@@ -766,7 +766,7 @@ class MultiUser
 		}
 		  if ($this->mmUserFile('PLUGINS') == "no") {
 			  $plugins_menu = ".plugins {display:none !important;}";
-			  $plugins_footer = "$(\"a\").remove(\":contains('Plugin Management')\");"; // ###
+			  $plugins_footer = "$(\"a\").remove(\":contains('". i18n_r(THISFILE_UM.'/PLUGINS_MANAGEMENT') ."')\");"; // ### Plugin Management
 		  }
 				else {
 				   $plugins_menu ="";
@@ -784,7 +784,7 @@ class MultiUser
 		}
 		  if ($this->mmUserFile('PAGES') == "no") {
 			  $pages_menu = ".pages {display:none !important;}";
-			  $pages_footer = "$(\"a\").remove(\":contains('Page Management')\");"; // ###
+			  $pages_footer = "$(\"a\").remove(\":contains('". i18n_r(THISFILE_UM.'/PAGE_MANAGEMENT') ."')\");"; // ### Page Management
 		  }
 				else {
 				   $pages_menu ="";
@@ -802,7 +802,7 @@ class MultiUser
 		}
 		 if ($this->mmUserFile('SUPPORT') == "no") {
 			  $support_menu = ".support {display:none !important;}";
-			  $support_footer = "$(\"a\").remove(\":contains('". i18n_r(THISFILE_UM.'/SUPPORT') ."')\");"; // Support
+			  $support_footer = "$(\"a\").remove(\":contains('". i18n_r(THISFILE_UM.'/SUPPORT') ."')\");"; // ### Support
 		  }
 				else {
 					$support_menu = "";
@@ -821,7 +821,7 @@ class MultiUser
 		}
 		  if ($this->mmUserFile('FILES') == "no") {
 			  $files_menu = ".files {display:none !important;}";
-			  $files_footer = "$(\"a\").remove(\":contains('File Management')\");"; // ###
+			  $files_footer = "$(\"a\").remove(\":contains('". i18n_r(THISFILE_UM.'/FILE_MANAGEMENT') ."')\");"; // ### File Management
 		  }
 				else {
 					 $files_menu = "";
@@ -839,7 +839,7 @@ class MultiUser
 		}
 		 if ($this->mmUserFile('THEME') == "no") {
 			  $theme_menu = ".theme {display:none !important;}";
-			  $theme_footer = "$(\"a\").remove(\":contains('Theme Management')\");"; // ### Theme Management
+			  $theme_footer = "$(\"a\").remove(\":contains('". i18n_r(THISFILE_UM.'/THEME_MANAGEMENT') ."')\");"; // ### Theme Management
 		  }
 				else {
 					$theme_menu = "";
@@ -887,7 +887,7 @@ class MultiUser
 				   }
 		}
 		if ($this->mmUserFile('EDIT') == "no") {
-			  $edit_footer = "$(\"a\").remove(\":contains('reate New Page')\");"; // ###
+			  $edit_footer = "$(\"a\").remove(\":contains('". i18n_r(THISFILE_UM.'/SIDE_CREATE_NEW') ."')\");"; // ### 'reate New Page'
 		  }
 				else {
 				  $edit_menu = "";
