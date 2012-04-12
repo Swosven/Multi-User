@@ -9,21 +9,26 @@
 
 	// get correct id for plugin
 	$thisfile = basename(__FILE__, ".php");
+	define('THISFILE_UM', $thisfile);
+	
+	# add in this plugin's language file
+	i18n_merge($thisfile) || i18n_merge( $thisfile, 'en_US');
 
 	// register plugin
-	register_plugin($thisfile, // ID of plugin, should be filename minus php
-	'Multi User',
+	register_plugin(
+	$thisfile, // ID of plugin, should be filename minus php
+	i18n_r(THISFILE_UM.'/PLUGIN_TITLE'), 
 	'1.5',
-	'Mike Henken', // Author of plugin
-	'http://www.michaelhenken.com/', // Author URL
-	'Adds Multi-User Management - Edit all options for current users and manage permissions.', // Plugin Description
-	'settings', // Page type of plugin
+	'Mike Henken', 
+	'http://www.michaelhenken.com/', 
+	i18n_r(THISFILE_UM.'/PLUGIN_DESC'), 
+	"settings", // Page type of plugin
 	'mm_admin' // Function that displays content
 	);
 
 	// activate hooks //
 	//Add Sidebar Item In Settings Page
-	add_action('settings-sidebar', 'createSideMenu', array($thisfile, 'User Management'));
+	add_action('settings-sidebar', 'createSideMenu', array($thisfile, i18n_r(THISFILE_UM.'/MENU_DESC')));
 	//Make the multiuser_perm() function run before each admin page loads
 	add_action('header', 'mm_permissions');
 	add_action('settings-user', 'mm_gs_settings_pg');
@@ -38,11 +43,11 @@ class MultiUser
 			$success = unlink($old_add_file);
 			if($success)
 			{
-				print "<div class=\"updated\" style=\"display: block;\">$old_add_file Has Been Successfully Deleted.<br/>This file was deleted because it is no longer needed for this plugin.</div>";
+				echo "<div class=\"updated\" style=\"display: block;\">", $old_add_file, i18n_r(THISFILE_UM.'/DELOLD') ,"</div>";
 			}
 			else
 			{
-				print "<div class=\"updated\" style=\"display: block;\"><span style=\"color:red;font-weight:bold;\">ERROR!!</span> - Unable To Delete $old_add_file<br/>You could delete $old_add_file if you would like. <br/>It is no longer needed for this plugin.</div>";
+				echo "<div class=\"updated\" style=\"display: block;\"><span style=\"color:red;font-weight:bold;\">", sprintf(i18n_r(THISFILE_UM.'/UNABLE_DELOLD'), $old_add_file), "</div>";
 			}
 		}
 	}
@@ -52,7 +57,7 @@ class MultiUser
 		{
 			$current_user = get_cookie('GS_ADMIN_USERNAME');
 			$dir = GSUSERSPATH . $current_user . ".xml";
-			$user_file = simplexml_load_file($dir) or die("Unable to load XML file!");
+			$user_file = simplexml_load_file($dir) or die( i18n_r(THISFILE_UM.'/UNABLE_DLXML') );
 			
 			if($data_Type == "")
 			{
@@ -93,11 +98,11 @@ class MultiUser
 		$success = unlink($thedelete);
 		if($success)
 		{
-			print "<div class=\"updated\" style=\"display: block;\">$deletename Has Been Successfully Deleted</div>";
+			echo "<div class=\"updated\" style=\"display: block;\">", sprintf(i18n_r(THISFILE_UM.'/DELFILE'), $deletename), "</div>";
 		}
 		else
 		{
-			print "<div class=\"updated\" style=\"display: block;\"><span style=\"color:red;font-weight:bold;\">ERROR!!</span> - Unable To Delete File, Please Check Error Log Or Turn On Debug Mode</div>";
+			echo "<div class=\"updated\" style=\"display: block;\"><span style=\"color:red;font-weight:bold;\">", i18n_r(THISFILE_UM.'/UNABLE_DELFILE'), "</div>";
 		}
 		$this->mmManageUsersForm();
 	}	
@@ -134,30 +139,32 @@ class MultiUser
 			$xml->addChild('USR', $NUSR);
 			$xml->addChild('PWD', $NPASSWD);
 			$xml->addChild('EMAIL', $_POST['useremail']);
-			$xml->addChild('HTMLEDITOR', $_POST['usereditor']);
+			// fix problem with unset checkboxes
+			$xml->addChild('HTMLEDITOR', (isset($_POST['usereditor'])? $_POST['usereditor'] : "") );
 			$xml->addChild('TIMEZONE', $_POST['ntimezone']);
 			$xml->addChild('LANG', $_POST['userlng']);
 			$perm = $xml->addChild('PERMISSIONS');
-			$perm->addChild('PAGES', $_POST['Pages']);
-			$perm->addChild('FILES', $_POST['Files']);
-			$perm->addChild('THEME', $_POST['Theme']);
-			$perm->addChild('PLUGINS', $_POST['Plugins']);
-			$perm->addChild('BACKUPS', $_POST['Backups']);
-			$perm->addChild('SETTINGS', $_POST['Settings']);
-			$perm->addChild('SUPPORT', $_POST['Support']);
-			$perm->addChild('EDIT', $_POST['Edit']);
+			// fix problem with unset checkboxes
+			$perm->addChild('PAGES', (isset($_POST['Pages'])? $_POST['Pages'] : "") );
+			$perm->addChild('FILES', (isset($_POST['Files'])? $_POST['Files'] : "") );
+			$perm->addChild('THEME', (isset($_POST['Theme'])? $_POST['Theme'] : "") );
+			$perm->addChild('PLUGINS', (isset($_POST['Plugins'])? $_POST['Plugins'] : "") );
+			$perm->addChild('BACKUPS', (isset($_POST['Backups'])? $_POST['Backups'] : "") );
+			$perm->addChild('SETTINGS', (isset($_POST['Settings'])? $_POST['Settings'] : "") );
+			$perm->addChild('SUPPORT', (isset($_POST['Support'])? $_POST['Support'] : "") );
+			$perm->addChild('EDIT', (isset($_POST['Edit'])? $_POST['Edit'] : "") );
 			$perm->addChild('LANDING', $NLANDING);
-			$perm->addChild('ADMIN', $_POST['Admin']);
+			$perm->addChild('ADMIN', (isset($_POST['Admin'])? $_POST['Admin'] : ""));
 			if (!XMLsave($xml, GSUSERSPATH . $usrfile)) 
 			{
-				$error = "Did Not Save File - ERROR!";
+				$error = i18n_r(THISFILE_UM.'/SAVE_ERROR');
 				echo $error;
 			}
 			
 			// Redirect after script is completed... I will make the script submit via ajax later
 			else 
 			{
-			  print '<div class="updated" style="display: block;">Your changes have been saved.</div>';
+			  echo '<div class="updated" style="display: block;">', i18n_r(THISFILE_UM.'/SAVE_CHANGE'), '</div>';
 			}
 			$this->mmManageUsersForm();
 		}
@@ -198,7 +205,7 @@ class MultiUser
 		// Redirect after script is completed... I will make the script submit via ajax later
 			else 
 			{
-				print '<div class="updated" style="display: block;">'.$NUSR.' Has Been Created.</div>';
+				echo '<div class="updated" style="display: block;">', $NUSR, i18n_r(THISFILE_UM.'/USER_CREATED'), '</div>';
 			}
 		//Show Manage Form
 		$this->mmManageUsersForm();
@@ -207,7 +214,7 @@ class MultiUser
 	public function mmManageUsersForm()
 	{
 		# get all available language files
-      $lang_handle = opendir(GSLANGPATH) or die("Unable to open ". GSLANGPATH);
+      $lang_handle = opendir(GSLANGPATH) or die( i18n_r(THISFILE_UM.'/UNABLE_OPEN'). GSLANGPATH);
       while ($lfile = readdir($lang_handle)) {
       	if( is_file(GSLANGPATH . $lfile) && $lfile != "." && $lfile != ".." )	{
       		$lang_array[] = basename($lfile, ".php");
@@ -286,22 +293,22 @@ class MultiUser
 		
 
       <!-- Below is the 'Table Headers' For The user data -->
-		<h3 class="floated">User Management</h3>
+		<h3 class="floated"><?php i18n(THISFILE_UM.'/USERMANAGE'); ?></h3>
 		<div class="edit-nav clearfix">
 			<p>
-				<a href="#" id="add-user">Add New User</a>
+				<a href="#" id="add-user"><?php i18n(THISFILE_UM.'/ADD_USER'); ?></a>
 			</p>
 			<p>
-				<a href="load.php?id=user-managment&download_id=133" ONCLICK="decision('Are You Sure You Want To Update This Plugin?')">Update This Plugin</a>
+				<a href="load.php?id=user-managment&download_id=133" ONCLICK="decision('<?php i18n(THISFILE_UM.'/UPDATE_PLUGINQ'); ?>')"><?php i18n(THISFILE_UM.'/UPDATE_PLUGIN'); ?></a>
 			</p>
 		</div>
 		
 		<table class="user_table">
 		<tr>
-			<th>Username:</th>
-			<th>Email:</th>
-			<th>HTML Editor:</th>
-			<th>Edit</th>
+			<th><?php i18n(THISFILE_UM.'/USERNAME'); ?></th>
+			<th><?php i18n(THISFILE_UM.'/EMAIL'); ?></th>
+			<th><?php i18n(THISFILE_UM.'/HTML_EDITOR'); ?></th>
+			<th><?php i18n(THISFILE_UM.'/EDIT'); ?></th>
 		</tr>
 
 <?php
@@ -310,7 +317,7 @@ class MultiUser
 
       // Make Edit Form For Each User XML File Found
       foreach (glob($dir) as $file) {
-          $xml = simplexml_load_file($file) or die("Unable to load XML file!");
+          $xml = simplexml_load_file($file) or die( i18n_r(THISFILE_UM.'/UNABLE_DLXML') );
 
 
       // PERMISSIONS CHECKBOXES - Checks XML File To Find Existing Permissions Settings //
@@ -324,7 +331,7 @@ class MultiUser
 		else 
 		{
 			$pageschecked = "";
-			$pages_dropdown = "<option value=\"pages.php\">Pages</option>";
+			$pages_dropdown = "<option value=\"pages.php\">". i18n_r(THISFILE_UM.'/PAGES') ."</option>";
 		}
 
 		//Files - uploads.php
@@ -434,7 +441,7 @@ class MultiUser
 
 			<!-- Edit Button (Expanded By Jquery Script) -->
 			<td>
-				<a style="" class="edit-pointer edit-user<?php echo $xml->USR; ?> acurser">Edit</a><a style="" class="hide-user<?php echo $xml->USR; ?> acurser hiduser">Hide</a>
+				<a style="" class="edit-pointer edit-user<?php echo $xml->USR; ?> acurser"><?php i18n(THISFILE_UM.'/EDIT'); ?></a><a style="" class="hide-user<?php echo $xml->USR; ?> acurser hiduser"><?php i18n(THISFILE_UM.'/HIDE'); ?></a>
 			</td>
 		</tr>
 
@@ -447,12 +454,12 @@ class MultiUser
 			<td style=""></td>
 			
 			<!-- Edit Email -->
-			<td style="">
+			<td style=""><label for="useremail"><?php i18n(THISFILE_UM.'/EMAIL'); ?></label>
 				<input class="text" id="useremail" name="useremail" type="text" value="<?php echo $xml->EMAIL; ?>" />
 			</td>
 
 			<!-- HTML Editor Permissions -->
-			<td  style="">
+			<td  style=""><label for="usereditor"><?php i18n(THISFILE_UM.'/HTML_EDITOR'); ?></label>
 				<input name="usereditor" id="usereditor" type="checkbox" <?php echo $cchecked; ?> />
 			</td>
 			
@@ -461,25 +468,25 @@ class MultiUser
 		<tr class="hide-div<?php echo $xml->USR; ?> user_sub_tr" style="">
 
 			<td style="">
-				<label for="userpassword">Password:</label>
+				<label for="userpassword"><?php i18n(THISFILE_UM.'/PASSWORD'); ?></label>
 				<input autocomplete="off" class="text" id="userpassword" name="userpassword" type="password" value="" />
 			</td>
 
 
 			<!-- Change Language -->
 			<td>
-				<label for="userlng">Language:</label>
+				<label for="userlng"><?php i18n(THISFILE_UM.'/LANGUAGE'); ?></label>
 				<select name="userlng" id="userlng" class="text">
-					<option value="<?php echo $xml->LANG; ?>"selected="selected"><?php echo $xml->LANG; ?></option>
+					<option value="<?php echo $xml->LANG; ?>" selected="selected"><?php echo $xml->LANG; ?></option>
 					<?php echo $langs; ?>
 				</select>
 			</td>
 
 			<!-- Change Timezone -->
 			<td>
-				<label for="ntimezone">Timezone:</label>
+				<label for="ntimezone"><?php i18n(THISFILE_UM.'/TIMEZONE'); ?></label>
 				<select class="text" id="ntimezone" name="ntimezone">
-					<option value="<?php echo $xml->TIMEZONE; ?>"  selected="selected"><?php echo $xml->TIMEZONE; ?></option>
+					<option value="<?php echo $xml->TIMEZONE; ?>" selected="selected"><?php echo $xml->TIMEZONE; ?></option>
 					<?php echo $Timezone_Include; ?>
 				</select>
 			</td>
@@ -487,62 +494,62 @@ class MultiUser
          
 		<!-- Permissions Checkboxes -->
 		<tr class="hide-div<?php echo $xml->USR; ?> user_sub_tr perm" style="">
-			<td colspan="4" height="16">
-				<h3 style="">Permissions (<strong>Check Areas</strong> You Would Like <strong>To Block</strong> Access To)</h3>
+			<td colspan="4" height="16"><br />
+				<h3 style=""><?php i18n(THISFILE_UM.'/PERMISSIONS'); ?></h3>
 			</td>
 		</tr>
 					
 		<tr class="hide-div<?php echo $xml->USR; ?> user_sub_tr" style="">
 			<td colspan="4">
-			<div class="perm_div"><label>Pages</label>
+			<div class="perm_div"><label><?php i18n(THISFILE_UM.'/PAGES'); ?></label>
 				<input type="checkbox" name="Pages" value="no" <?php echo $pageschecked; ?> />
 			</div>
 
-			<div class="perm_div"><label>Files</label>
+			<div class="perm_div"><label><?php i18n(THISFILE_UM.'/FILES'); ?></label>
 				<input type="checkbox" name="Files" value="no" <?php echo $fileschecked; ?> />
 			</div>
 
-			<div class="perm_div"><label>Theme</label>
+			<div class="perm_div"><label><?php i18n(THISFILE_UM.'/THEME'); ?></label>
 				<input type="checkbox" name="Theme" value="no" <?php echo $themechecked; ?> />
 			</div>
 
-			<div class="perm_div"><label>Plugins</label>
+			<div class="perm_div"><label><?php i18n(THISFILE_UM.'/PLUGINS'); ?></label>
 				<input type="checkbox" name="Plugins" value="no" <?php echo $pluginschecked; ?> />
 			</div>
 
-			<div class="perm_div"><label>Backups</label>
+			<div class="perm_div"><label><?php i18n(THISFILE_UM.'/BACKUPS'); ?></label>
 				<input type="checkbox" name="Backups" value="no" <?php echo $backupschecked; ?> />
 			</div>
 
-			<div class="perm_div"><label>Settings</label>
+			<div class="perm_div"><label><?php i18n(THISFILE_UM.'/SETTINGS'); ?></label>
 				<input type="checkbox" name="Settings" value="no" <?php echo $settingschecked; ?> />
 			</div>
 
-			<div class="perm_div"><label>Support</label>
+			<div class="perm_div"><label><?php i18n(THISFILE_UM.'/SUPPORT'); ?></label>
 				<input type="checkbox" name="Support" value="no" <?php echo $supportchecked; ?> />
 			</div>
 
-			<div class="perm_div"><label>Edit</label>
+			<div class="perm_div"><label><?php i18n(THISFILE_UM.'/EDIT'); ?></label>
 				<input type="checkbox" name="Edit" value="no" <?php echo $editchecked; ?> />
 			</div>
 
-			<div class="perm_select"><label>Custom Landing Page (Optional)
-				<a class="hcurser" title="This is where you can set an alternate landing page the user will arrive at upon logging in">?</a></label>
+			<div class="perm_select"><label><?php i18n(THISFILE_UM.'/CUSTOM_LABEL'); ?>
+				<a class="hcurser" title="<?php i18n(THISFILE_UM.'/CUSTOM_TITLE'); ?>">?</a></label>
 				<select name="Landing" id="userland" class="text">
-					<option value="$landingselected" selected="selected"><?php echo $landingselected; ?></option>
+					<option value="<?php echo $landingselected; ?>" selected="selected"><?php echo $landingselected; ?></option>
 					<?php echo $pages_dropdown; ?>
-					<option value="theme.php">Theme</option>
-					<option value="settings.php">Settings</option>
-					<option value="support.php">Support</option>
-					<option value="edit.php">Edit</option>
-					<option value="plugins.php">Plugins</option>
-					<option value="upload.php">Upload</option>
-					<option value="backups.php">Backups</option>
+					<option value="theme.php"><?php i18n(THISFILE_UM.'/THEME'); ?></option>
+					<option value="settings.php"><?php i18n(THISFILE_UM.'/SETTINGS'); ?></option>
+					<option value="support.php"><?php i18n(THISFILE_UM.'/SUPPORT'); ?></option>
+					<option value="edit.php"><?php i18n(THISFILE_UM.'/EDIT'); ?></option>
+					<option value="plugins.php"><?php i18n(THISFILE_UM.'/PLUGINS'); ?></option>
+					<option value="upload.php"><?php i18n(THISFILE_UM.'/UPLOAD'); ?></option>
+					<option value="backups.php"><?php i18n(THISFILE_UM.'/BACKUPS'); ?></option>
 				</select>
 			</div>
 
 			<div class="perm_div_2">
-				<label>Disable Admin Access (Cannot Manage Users)</label>
+				<label><?php i18n(THISFILE_UM.'/DISABLE_ACCESS'); ?></label>
 				<input type="checkbox" id="Admin" name="Admin" value="no" <?php echo $adminchecked; ?> />
 			</div>
 
@@ -554,8 +561,10 @@ class MultiUser
 		<!-- Submit Form -->
 		<tr class="hide-div<?php echo $xml->USR; ?> user_sub_tr perm" style="">
 		<td>
-			<input class="submit" type="submit" name="edit-user" value="Save Changes"/>
-			&nbsp;&nbsp;&nbsp;<a class="hcurser" ONCLICK="decision('Are You Sure You Want To Delete <?php echo $xml->USR; ?>','load.php?id=user-managment&deletefile=<?php echo $xml->USR; ?>')">Delete User</a>
+			<br />
+			<input class="submit" type="submit" name="edit-user" value="<?php i18n(THISFILE_UM.'/BUTTON_SAVE'); ?>"/><br /><br />
+			&nbsp;&nbsp;&nbsp;<a class="hcurser" ONCLICK="decision('<?php i18n(THISFILE_UM.'/SAVE_CONFIRM'); echo $xml->USR; ?>','load.php?id=user-managment&deletefile=<?php echo $xml->USR; ?>')"><?php i18n(THISFILE_UM.'/DEL_USER'); ?></a>
+		<br /><br />
 		</td>
 		</tr>
 		</div>
@@ -570,7 +579,7 @@ class MultiUser
  echo '<script type="text/javascript">';
       //For Each User XML Filed, Print jQuery To Show/Hide The 'Edit User' And 'Add User' Sections
       foreach (glob($dir) as $file) {
-          $xml = simplexml_load_file($file) or die("Unable to load XML file!");
+          $xml = simplexml_load_file($file) or die( i18n_r(THISFILE_UM.'/UNABLE_DLXML') );
 		  ?>
 		  
           $(".edit-user<?php echo $xml->USR; ?>").click(function () {
@@ -601,87 +610,86 @@ class MultiUser
  <!-- Below is the html form to add a new user.. It is proccesed with 'readxml.php' -->
       <div id="profile" class="hide-div section" style="display:none;margin-top:0px;">
       <form method="post" action="load.php?id=user-managment">
-    <h3>Add New User</h3>
+    <h3><?php i18n(THISFILE_UM.'/ADD_USER'); ?></h3>
     <div class="leftsec">
-      <p><label for="usernamec" >Username:</label><input class="text" id="usernamec" name="usernamec" type="text" value="" /></p>
+      <p><label for="usernamec" ><?php i18n(THISFILE_UM.'/USERNAME'); ?></label><input class="text" id="usernamec" name="usernamec" type="text" value="" /></p>
     </div>
     <div class="rightsec">
-      <p><label for="useremail" >Email :</label><input class="text" id="useremail" name="useremail" type="text" value="" /></p>
+      <p><label for="useremail" ><?php i18n(THISFILE_UM.'/EMAIL'); ?></label><input class="text" id="useremail" name="useremail" type="text" value="" /></p>
     </div>
     <div class="leftsec">
-      <p><label for="ntimezone" >Timezone:</label>
+      <p><label for="ntimezone" ><?php i18n(THISFILE_UM.'/TIMEZONE'); ?></label>
       <select class="text" id="ntimezone" name="ntimezone">
       <option value="<?php echo $this->mmUserFile('TIMEZONE', true); ?>"  selected="selected"><?php echo $xml->TIMEZONE; ?></option>
           <?php echo $Timezone_Include; ?>
-								</select>
       </select>
       </p>
     </div>
     <div class="rightsec">
-      <p><label for="userlng" >Language:</label>
+      <p><label for="userlng" ><?php i18n(THISFILE_UM.'/LANGUAGE'); ?></label>
       <select name="userlng" id="userlng" class="text">
-			<option value="en_US"selected="selected">English (en_US)</option>
+			<option value="en_US"selected="selected"><?php i18n(THISFILE_UM.'/LANG_EN'); ?></option>
            <?php echo $langs ?>
       </select>
       </p>
     </div>
      <div class="leftsec">
-      <p><label for="userpassword" >Password:</label><input autocomplete="off" class="text" id="userpassword" name="userpassword" type="password" value="" /></p>
+      <p><label for="userpassword" ><?php i18n(THISFILE_UM.'/PASSWORD'); ?></label><input autocomplete="off" class="text" id="userpassword" name="userpassword" type="password" value="" /></p>
     </div>
      <div class="leftsec">
-       <p class="inline" style="padding-top:24px;"><input name="usereditor" id="usereditor" type="checkbox" value="1" checked="checked" /> &nbsp;<label for="usereditor" >Enable the HTML editor</label></p>
+       <p class="inline" style="padding-top:24px;"><input name="usereditor" id="usereditor" type="checkbox" value="1" checked="checked" /> &nbsp;<label for="usereditor" ><?php i18n(THISFILE_UM.'/ENABLE_HTML'); ?></label></p>
     </div>
       <div class="clear"></div>
-      <h3 style="font-size:14px;">Permissions (<strong>Check Areas</strong> You Would Like <strong>To Block</strong> Access To)</h3>
-             <div class="perm_div"><label for="Pages">Pages</label>
+      <h3 style="font-size:14px;"><?php i18n(THISFILE_UM.'/PERMISSIONS'); ?></h3>
+             <div class="perm_div"><label for="Pages"><?php i18n(THISFILE_UM.'/PAGES'); ?></label>
                              <input type="checkbox" id="Pages" name="Pages" value="no" />
                              </div>
 
-                             <div class="perm_div"><label for="Files">Files</label>
+                             <div class="perm_div"><label for="Files"><?php i18n(THISFILE_UM.'/FILES'); ?></label>
                              <input type="checkbox" id="Files" name="Files" value="no" />
                              </div>
 
-                             <div class="perm_div"><label for="Theme">Theme</label>
+                             <div class="perm_div"><label for="Theme"><?php i18n(THISFILE_UM.'/THEME'); ?></label>
                              <input type="checkbox" id="Theme" name="Theme" value="no" />
                              </div>
 
-                             <div class="perm_div"><label for="Plugins">Plugins</label>
+                             <div class="perm_div"><label for="Plugins"><?php i18n(THISFILE_UM.'/PLUGINS'); ?></label>
                              <input type="checkbox" id="Plugins" name="Plugins" value="no" />
                              </div>
 
-                             <div class="perm_div"><label for="Backups">Backups</label>
+                             <div class="perm_div"><label for="Backups"><?php i18n(THISFILE_UM.'/BACKUPS'); ?></label>
                              <input type="checkbox" id="Backups" name="Backups" value="no" />
                              </div>
 
-                             <div class="perm_div"><label for="Settings">Settings</label>
+                             <div class="perm_div"><label for="Settings"><?php i18n(THISFILE_UM.'/SETTINGS'); ?></label>
                              <input type="checkbox" id="Settings" name="Settings" value="no" />
                              </div>
 
-                             <div class="perm_div"><label for="Support">Support</label>
+                             <div class="perm_div"><label for="Support"><?php i18n(THISFILE_UM.'/SUPPORT'); ?></label>
                              <input type="checkbox" id="Support" name="Support" value="no" />
                              </div>
 
-                             <div class="perm_div"><label for="Edit">Edit</label>
+                             <div class="perm_div"><label for="Edit"><?php i18n(THISFILE_UM.'/EDIT'); ?></label>
                              <input type="checkbox" id="Edit" name="Edit" value="no" />
                              </div>
                              <div style="clear:both"></div>
 
-                             <div class="perm_select"><label for="userland">Custom Landing Page (Optional)
-                             <a href="#" title="This is where you can set an alternate landing page the user will arrive at upon logging in">?</a></label>
+                             <div class="perm_select"><label for="userland"><?php i18n(THISFILE_UM.'/CUSTOM_LABEL'); ?>
+                             <a href="#" title="<?php i18n(THISFILE_UM.'/CUSTOM_TITLE'); ?>">?</a></label>
                              <select name="Landing" id="userland" class="text">
                               <option value="" selected="selected"></option>
-						      <option value="pages.php">Pages</option>
-                              <option value="theme.php">Theme</option>
-                              <option value="settings.php">Settings</option>
-                              <option value="support.php">Support</option>
-                              <option value="edit.php">Edit</option>
-                              <option value="plugins.php">Plugins</option>
-                              <option value="upload.php">Upload</option>
-                              <option value="backups.php">Backups</option>
+						      <option value="pages.php"><?php i18n(THISFILE_UM.'/PAGES'); ?></option>
+                              <option value="theme.php"><?php i18n(THISFILE_UM.'/THEME'); ?></option>
+                              <option value="settings.php"><?php i18n(THISFILE_UM.'/SETTINGS'); ?></option>
+                              <option value="support.php"><?php i18n(THISFILE_UM.'/SUPPORT'); ?></option>
+                              <option value="edit.php"><?php i18n(THISFILE_UM.'/EDIT'); ?></option>
+                              <option value="plugins.php"><?php i18n(THISFILE_UM.'/PLUGINS'); ?></option>
+                              <option value="upload.php"><?php i18n(THISFILE_UM.'/UPLOAD'); ?></option>
+                              <option value="backups.php"><?php i18n(THISFILE_UM.'/BACKUPS'); ?></option>
 						      </select>
                              </div>
 
-                             <div class="perm_div_2"><label for="Admin">Disable Admin Access (Cannot Manage Users)</label>
+                             <div class="perm_div_2"><label for="Admin"><?php i18n(THISFILE_UM.'/DISABLE_ACCESS'); ?></label>
                              <input type="checkbox" id="Admin" name="Admin" value="no" />
                              </div>
 
@@ -695,7 +703,7 @@ class MultiUser
     <div class="clear"></div>
 
     <p id="submit_line" >
-      <span><input class="submit" type="submit" name="add-user" value="Add New User" /></span> 
+      <span><input class="submit" type="submit" name="add-user" value="<?php i18n(THISFILE_UM.'/ADD_USER'); ?>" /></span> 
 	  &nbsp;&nbsp;<?php i18n('OR'); ?>&nbsp;&nbsp; <a class="cancel" href="settings.php?cancel"><?php i18n('CANCEL'); ?></a>
     </p></form>
     </div>
@@ -714,7 +722,7 @@ class MultiUser
 		//Settings.php permissions
 		if ($current_file == "settings.php") {
 		  if ($this->mmUserFile('SETTINGS') == "no") {
-			  die('You Do Not Have Permissions To Access This Page');
+			  die( i18n_r(THISFILE_UM.'/NO_ACCESS') );
 		  }
 				else {
 				   $settings_menu ="";
@@ -722,7 +730,7 @@ class MultiUser
 		}
 		  if ($this->mmUserFile('SETTINGS') == "no") {
 			  $settings_menu = ".settings {display:none !important;}";
-			  $settings_footer = "$(\"a\").remove(\":contains('General Settings')\");";
+			  $settings_footer = "$(\"a\").remove(\":contains('General Settings')\");"; // ###
 		  }
 				else {
 				   $settings_menu ="";
@@ -732,7 +740,7 @@ class MultiUser
 		//backups.php permisions
 		if ($current_file == "backups.php") {
 		  if ($this->mmUserFile('BACKUPS') == "no") {
-			  die('You Do Not Have Permissions To Access This Page');
+			  die( i18n_r(THISFILE_UM.'/NO_ACCESS') );
 		  }
 				else {
 				   $backups_menu ="";
@@ -740,7 +748,7 @@ class MultiUser
 		}
 		  if ($this->mmUserFile('BACKUPS') == "no") {
 			  $backups_menu = ".backups {display:none !important;}";
-			  $backups_footer = "$(\"a\").remove(\":contains('Backup Management')\");";
+			  $backups_footer = "$(\"a\").remove(\":contains('Backup Management')\");"; // ###
 		  }
 				else {
 				   $backups_menu ="";
@@ -750,7 +758,7 @@ class MultiUser
 		//plugins.php permissions
 		if ($current_file == "plugins.php") {
 		  if ($this->mmUserFile('PLUGINS') == "no") {
-			  die('You Do Not Have Permissions To Access This Page');
+			  die( i18n_r(THISFILE_UM.'/NO_ACCESS') );
 		  }
 				else {
 				   $plugins_menu ="";
@@ -758,7 +766,7 @@ class MultiUser
 		}
 		  if ($this->mmUserFile('PLUGINS') == "no") {
 			  $plugins_menu = ".plugins {display:none !important;}";
-			  $plugins_footer = "$(\"a\").remove(\":contains('Plugin Management')\");";
+			  $plugins_footer = "$(\"a\").remove(\":contains('Plugin Management')\");"; // ###
 		  }
 				else {
 				   $plugins_menu ="";
@@ -776,7 +784,7 @@ class MultiUser
 		}
 		  if ($this->mmUserFile('PAGES') == "no") {
 			  $pages_menu = ".pages {display:none !important;}";
-			  $pages_footer = "$(\"a\").remove(\":contains('Page Management')\");";
+			  $pages_footer = "$(\"a\").remove(\":contains('Page Management')\");"; // ###
 		  }
 				else {
 				   $pages_menu ="";
@@ -786,7 +794,7 @@ class MultiUser
 		//support.php & health-check.php permissions
 		if ($current_file == "support.php") {
 		  if ($this->mmUserFile('SUPPORT') == "no") {
-			  die('You Do Not Have Permissions To Access This Page');
+			  die( i18n_r(THISFILE_UM.'/NO_ACCESS') );
 		  }
 				else {
 					$support_menu = "";
@@ -794,7 +802,7 @@ class MultiUser
 		}
 		 if ($this->mmUserFile('SUPPORT') == "no") {
 			  $support_menu = ".support {display:none !important;}";
-			  $support_footer = "$(\"a\").remove(\":contains('Support')\");";
+			  $support_footer = "$(\"a\").remove(\":contains('". i18n_r(THISFILE_UM.'/SUPPORT') ."')\");"; // Support
 		  }
 				else {
 					$support_menu = "";
@@ -804,7 +812,7 @@ class MultiUser
 		//uploads.php (files page) permissions
 		if ($current_file == "upload.php") {
 		  if ($this->mmUserFile('FILES') == "no") {
-			  die('You Do Not Have Permissions To Access This Page');
+			  die( i18n_r(THISFILE_UM.'/NO_ACCESS') );
 		  }
 				else {
 					 $files_menu = "";
@@ -813,7 +821,7 @@ class MultiUser
 		}
 		  if ($this->mmUserFile('FILES') == "no") {
 			  $files_menu = ".files {display:none !important;}";
-			  $files_footer = "$(\"a\").remove(\":contains('File Management')\");";
+			  $files_footer = "$(\"a\").remove(\":contains('File Management')\");"; // ###
 		  }
 				else {
 					 $files_menu = "";
@@ -823,7 +831,7 @@ class MultiUser
 		//theme.php permissions
 		if ($current_file == "theme.php") {
 		  if ($this->mmUserFile('THEME') == "no") {
-			  die('You Do Not Have Permissions To Access This Page');
+			  die( i18n_r(THISFILE_UM.'/NO_ACCESS') );
 		  }
 				else {
 					$theme_menu = "";
@@ -831,7 +839,7 @@ class MultiUser
 		}
 		 if ($this->mmUserFile('THEME') == "no") {
 			  $theme_menu = ".theme {display:none !important;}";
-			  $theme_footer = "$(\"a\").remove(\":contains('Theme Management')\");";
+			  $theme_footer = "$(\"a\").remove(\":contains('Theme Management')\");"; // ### Theme Management
 		  }
 				else {
 					$theme_menu = "";
@@ -841,7 +849,7 @@ class MultiUser
 		//archive.php
 		if ($current_file == "archive.php") {
 		  if ($this->mmUserFile('BACKUPS') == "no") {
-			  die('You Do Not Have Permissions To Access This Page');
+			  die( i18n_r(THISFILE_UM.'/NO_ACCESS') );
 		  }
 				else {
 
@@ -851,7 +859,7 @@ class MultiUser
 		//theme-edit.php permissions
 		if ($current_file == "theme-edit.php") {
 		  if ($this->mmUserFile('THEME') == "no") {
-			  die('You Do Not Have Permissions To Access This Page');
+			  die( i18n_r(THISFILE_UM.'/NO_ACCESS') );
 		  }
 				else {
 
@@ -861,7 +869,7 @@ class MultiUser
 		//components.php permissions
 		if ($current_file == "components.php") {
 		  if ($this->mmUserFile('THEME') == "no") {
-			  die('You Do Not Have Permissions To Access This Page');
+			  die( i18n_r(THISFILE_UM.'/NO_ACCESS') );
 		  }
 				else {
 
@@ -872,14 +880,14 @@ class MultiUser
 		//edit.php
 		if ($current_file == "edit.php") {
 		  if ($this->mmUserFile('EDIT') == "no") {
-			  die('You Do Not Have Permissions To Access This Page');
+			  die( i18n_r(THISFILE_UM.'/NO_ACCESS') );
 		  }
 				else {
 				  $edit_menu = "";
 				   }
 		}
 		if ($this->mmUserFile('EDIT') == "no") {
-			  $edit_footer = "$(\"a\").remove(\":contains('reate New Page')\");";
+			  $edit_footer = "$(\"a\").remove(\":contains('reate New Page')\");"; // ###
 		  }
 				else {
 				  $edit_menu = "";
@@ -889,12 +897,12 @@ class MultiUser
 		//Admin - Do not allow permissions to edit users
 		if ($current_script == "id=user-managment") {
 		  if ($this->mmUserFile('ADMIN') == "no") {
-			  die('You Do Not Have Permissions To Access This Page');
+			  die( i18n_r(THISFILE_UM.'/NO_ACCESS') );
 		  }
 		}
 
 		if ($this->mmUserFile('ADMIN') == "no") {
-				$admin_footer = "$(\"a\").remove(\":contains('User Management')\");";
+				$admin_footer = "$(\"a\").remove(\":contains('".i18n_r(THISFILE_UM.'/MENU_DESC')."')\");"; // ### User Management
 		  }
 				else {
 				  $admin_footer ="";
@@ -903,17 +911,14 @@ class MultiUser
 		//Hide Menu Items
 		echo"<style type=\"text/css\">";
 
-		echo $settings_menu . $backups_menu . $plugins_menu . $pages_menu . $support_menu . $files_menu . $theme_menu;
+		echo $settings_menu, $backups_menu, $plugins_menu, $pages_menu, $support_menu, $files_menu, $theme_menu;
 
 		echo "</style>";
 
 		//Hide Footer Menu Items With Jquery
-		echo "<script type=\"text/javascript\">";
-		echo "\n";
-		echo "$(document).ready(function() {";
-		echo "\n";
-		echo $files_footer . $settings_footer . "\n" . $backups_footer . "\n" . $plugins_footer . "\n" . $pages_footer . "\n" . $support_footer . "\n" . $theme_footer . "\n" . $edit_footer . "\n" . $admin_footer;
-		echo "\n";
+		echo "<script type=\"text/javascript\">\n";
+		echo "$(document).ready(function() {\n";
+		echo $files_footer, $settings_footer, "\n", $backups_footer, "\n", $plugins_footer, "\n", $pages_footer, "\n", $support_footer, "\n", $theme_footer, "\n", $edit_footer, "\n", $admin_footer, "\n";
 		echo " });";
 		echo "</script>";
 	}
@@ -1029,10 +1034,10 @@ class MultiUser
 					// Extract C:/zipfiletest/zip-file.zip to C:/another_map/zipfiletest/ and doesn't overwrite existing files. NOTE: It doesn't create a map with the zip-file-name!
 					$success = unzip($pluginfile, "../plugins/", true, true);
 					if ($success){
-					  print '<div class="updated">'.$pluginname.' Was Succesfully Updated</div>';
+					  echo '<div class="updated">', $pluginname, i18n_r(THISFILE_UM.'/UPDATE_SUCCESS'), '</div>';
 					}
 					else{
-					  print "<div class=\"updated\">Error: DAMN! The Script Could Not Extract And CHMOD The Archive</div>";
+					  echo "<div class=\"updated\">", i18n_r(THISFILE_UM.'/UPDATE_ERROR'), "</div>";
 					}
 			$this->mmManageUsersForm();
 	}
