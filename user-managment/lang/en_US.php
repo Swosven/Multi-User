@@ -48,14 +48,16 @@ $i18n = array(
 	
 	// from admin/lang 
 	// /!\ no "'"
+	/*
 	"GENERAL_SETTINGS"		=>	"General Settings",
 	"BAK_MANAGEMENT"		=>	"Backup Management",
 	"PLUGINS_MANAGEMENT"	=> "Plugin Management",
-"PAGE_MANAGEMENT"		=>	"Page Management",
-"SUPPORT" 					=> 	"Support",
-"FILE_MANAGEMENT"		=>	"File Management",
-"THEME_MANAGEMENT" 	=> 	"Theme Management",
-"SIDE_CREATE_NEW"		=>	"reate New Page", // minus "<em>C</em>"
+	"PAGE_MANAGEMENT"		=>	"Page Management",
+	"SUPPORT" 				=> 	"Support",
+	"FILE_MANAGEMENT"		=>	"File Management",
+	"THEME_MANAGEMENT" 		=> 	"Theme Management",
+	*/
+	"SIDE_CREATE_NEW"		=>	"reate New Page", // minus "<em>C</em>"
 );
 
 

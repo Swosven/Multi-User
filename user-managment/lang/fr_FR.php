@@ -45,17 +45,17 @@ $i18n = array(
 	'HTML_EDITOR' 			=> "Éditeur HTML&nbsp;:",
 	'USERMANAGE' 			=> "Gestion utilisateurs",
 	
-	
 	// from admin/lang
 	// /!\ no "'"
+	/*
 	"GENERAL_SETTINGS"		=>	"Paramètres généraux",
 	"BAK_MANAGEMENT"		=>	"Gestion des sauvegardes",
 	"PLUGINS_MANAGEMENT"	=> "Gestionnaire de Plugin",
-	"PAGE_MANAGEMENT"		=>	"Page Management",
+	"PAGE_MANAGEMENT"		=>	"Gestion des pages",
 	'SUPPORT' 				=> "Support",
 	"FILE_MANAGEMENT"		=>	"Gestion des fichiers",
 	"THEME_MANAGEMENT" 		=> 	"Gestion des thèmes",
-	"SIDE_CREATE_NEW"		=>	"réer une nouvelle page", // moins "<em>C</em>"
-	
+	*/
+	"SIDE_CREATE_NEW"		=>	"réer une nouvelle page", // moins - "<em>C</em>"
 );
 
