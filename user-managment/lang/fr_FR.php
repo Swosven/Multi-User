@@ -15,19 +15,11 @@ $i18n = array(
 	'UNABLE_OPEN' 			=> "Impossible d'ouvrir ",
 	'UPDATE_PLUGINQ' 		=> "Voulez-vous mettre à jour ce plugin&nbsp;?", // html javascript, no "'"
 	'UPDATE_PLUGIN' 		=> "Mettre à jour ce plugin",
-	'PAGES' 				=> "Pages",
-	'EDIT' 					=> "Modifier",
 	'HIDE' 					=> "Masquer",
 	'PASSWORD' 				=> "Mot de passe&nbsp;:",
 	'LANGUAGE' 				=> "Langage&nbsp;:",
 	'TIMEZONE' 				=> "Fuseau horaire&nbsp;:",
 	'PERMISSIONS' 			=> "Permissions (<strong>Cochez les zones</strong> que vous voudriez <strong>interdire</strong> d'accès)",
-	'FILES' 				=> "Fichiers",
-	'THEME' 				=> "Thème",
-	'PLUGINS' 				=> "Plugins",
-	'BACKUPS' 				=> "Sauvegardes",
-	'UPLOAD' 				=> "Upload",
-	'SETTINGS' 				=> "Paramètres",
 	'CUSTOM_LABEL' 			=> "Page d'accueil personnalisée (Optionnel)",
 	'CUSTOM_TITLE' 			=> "Ici, vous pouvez déterminer une page d'accueil différente pour l'utilisateur lorqu'il se sera connecté.", // no '"'
 	'DISABLE_ACCESS' 		=> "Désactiver l'accès administrateur (Ne pourra pas gérer les utilisateurs)",
@@ -47,15 +39,6 @@ $i18n = array(
 	
 	// from admin/lang
 	// /!\ no "'"
-	/*
-	"GENERAL_SETTINGS"		=>	"Paramètres généraux",
-	"BAK_MANAGEMENT"		=>	"Gestion des sauvegardes",
-	"PLUGINS_MANAGEMENT"	=> "Gestionnaire de Plugin",
-	"PAGE_MANAGEMENT"		=>	"Gestion des pages",
-	'SUPPORT' 				=> "Support",
-	"FILE_MANAGEMENT"		=>	"Gestion des fichiers",
-	"THEME_MANAGEMENT" 		=> 	"Gestion des thèmes",
-	*/
 	"SIDE_CREATE_NEW"		=>	"réer une nouvelle page", // moins - "<em>C</em>"
 );
 

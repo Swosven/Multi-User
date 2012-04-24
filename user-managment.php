@@ -158,7 +158,7 @@ class MultiUser
 			if (!XMLsave($xml, GSUSERSPATH . $usrfile)) 
 			{
 				$error = i18n_r(THISFILE_UM.'/SAVE_ERROR');
-				echo $error;
+				echo '<div class="updated" style="display: block;"><span style="color:red;font-weight:bold;">', $error, "</div>";
 			}
 			
 			// Redirect after script is completed... I will make the script submit via ajax later
@@ -308,7 +308,7 @@ class MultiUser
 			<th><?php i18n(THISFILE_UM.'/USERNAME'); ?></th>
 			<th><?php i18n(THISFILE_UM.'/EMAIL'); ?></th>
 			<th><?php i18n(THISFILE_UM.'/HTML_EDITOR'); ?></th>
-			<th><?php i18n(THISFILE_UM.'/EDIT'); ?></th>
+			<th><?php i18n('EDIT'); ?></th>
 		</tr>
 
 <?php
@@ -331,7 +331,7 @@ class MultiUser
 		else 
 		{
 			$pageschecked = "";
-			$pages_dropdown = "<option value=\"pages.php\">". i18n_r(THISFILE_UM.'/PAGES') ."</option>";
+			$pages_dropdown = "<option value=\"pages.php\">". strip_tags(i18n_r('TAB_PAGES')) ."</option>";
 		}
 
 		//Files - uploads.php
@@ -441,7 +441,7 @@ class MultiUser
 
 			<!-- Edit Button (Expanded By Jquery Script) -->
 			<td>
-				<a style="" class="edit-pointer edit-user<?php echo $xml->USR; ?> acurser"><?php i18n(THISFILE_UM.'/EDIT'); ?></a><a style="" class="hide-user<?php echo $xml->USR; ?> acurser hiduser"><?php i18n(THISFILE_UM.'/HIDE'); ?></a>
+				<a style="" class="edit-pointer edit-user<?php echo $xml->USR; ?> acurser"><?php i18n('EDIT'); ?></a><a style="" class="hide-user<?php echo $xml->USR; ?> acurser hiduser"><?php i18n(THISFILE_UM.'/HIDE'); ?></a>
 			</td>
 		</tr>
 
@@ -501,35 +501,35 @@ class MultiUser
 					
 		<tr class="hide-div<?php echo $xml->USR; ?> user_sub_tr" style="">
 			<td colspan="4">
-			<div class="perm_div"><label><?php i18n(THISFILE_UM.'/PAGES'); ?></label>
+			<div class="perm_div"><label><?php echo strip_tags(i18n_r('TAB_PAGES')); ?></label>
 				<input type="checkbox" name="Pages" value="no" <?php echo $pageschecked; ?> />
 			</div>
 
-			<div class="perm_div"><label><?php i18n(THISFILE_UM.'/FILES'); ?></label>
+			<div class="perm_div"><label><?php echo strip_tags(i18n_r('TAB_FILES')); ?></label>
 				<input type="checkbox" name="Files" value="no" <?php echo $fileschecked; ?> />
 			</div>
 
-			<div class="perm_div"><label><?php i18n(THISFILE_UM.'/THEME'); ?></label>
+			<div class="perm_div"><label><?php echo strip_tags(i18n_r('TAB_THEME')); ?></label>
 				<input type="checkbox" name="Theme" value="no" <?php echo $themechecked; ?> />
 			</div>
 
-			<div class="perm_div"><label><?php i18n(THISFILE_UM.'/PLUGINS'); ?></label>
+			<div class="perm_div"><label><?php echo strip_tags(i18n_r('PLUGINS_NAV')); ?></label>
 				<input type="checkbox" name="Plugins" value="no" <?php echo $pluginschecked; ?> />
 			</div>
 
-			<div class="perm_div"><label><?php i18n(THISFILE_UM.'/BACKUPS'); ?></label>
+			<div class="perm_div"><label><?php echo strip_tags(i18n_r('TAB_BACKUPS')); ?></label>
 				<input type="checkbox" name="Backups" value="no" <?php echo $backupschecked; ?> />
 			</div>
 
-			<div class="perm_div"><label><?php i18n(THISFILE_UM.'/SETTINGS'); ?></label>
+			<div class="perm_div"><label><?php echo strip_tags(i18n_r('TAB_SETTINGS')); ?></label>
 				<input type="checkbox" name="Settings" value="no" <?php echo $settingschecked; ?> />
 			</div>
 
-			<div class="perm_div"><label><?php i18n(THISFILE_UM.'/SUPPORT'); ?></label>
+			<div class="perm_div"><label><?php echo strip_tags(i18n_r('TAB_SUPPORT')); ?></label>
 				<input type="checkbox" name="Support" value="no" <?php echo $supportchecked; ?> />
 			</div>
 
-			<div class="perm_div"><label><?php i18n(THISFILE_UM.'/EDIT'); ?></label>
+			<div class="perm_div"><label><?php i18n('EDIT'); ?></label>
 				<input type="checkbox" name="Edit" value="no" <?php echo $editchecked; ?> />
 			</div>
 
@@ -538,13 +538,13 @@ class MultiUser
 				<select name="Landing" id="userland" class="text">
 					<option value="<?php echo $landingselected; ?>" selected="selected"><?php echo $landingselected; ?></option>
 					<?php echo $pages_dropdown; ?>
-					<option value="theme.php"><?php i18n(THISFILE_UM.'/THEME'); ?></option>
-					<option value="settings.php"><?php i18n(THISFILE_UM.'/SETTINGS'); ?></option>
-					<option value="support.php"><?php i18n(THISFILE_UM.'/SUPPORT'); ?></option>
-					<option value="edit.php"><?php i18n(THISFILE_UM.'/EDIT'); ?></option>
-					<option value="plugins.php"><?php i18n(THISFILE_UM.'/PLUGINS'); ?></option>
-					<option value="upload.php"><?php i18n(THISFILE_UM.'/UPLOAD'); ?></option>
-					<option value="backups.php"><?php i18n(THISFILE_UM.'/BACKUPS'); ?></option>
+					<option value="theme.php"><?php echo strip_tags(i18n_r('TAB_THEME')); ?></option>
+					<option value="settings.php"><?php echo strip_tags(i18n_r('TAB_SETTINGS'));  ?></option>
+					<option value="support.php"><?php i18n('SUPPORT'); ?></option>
+					<option value="edit.php"><?php i18n('EDIT'); ?></option>
+					<option value="plugins.php"><?php echo strip_tags(i18n_r('PLUGINS_NAV')); ?></option>
+					<option value="upload.php"><?php echo strip_tags(i18n_r('TAB_FILES')); ?></option>
+					<option value="backups.php"><?php echo strip_tags(i18n_r('TAB_BACKUPS')); ?></option>
 				</select>
 			</div>
 
@@ -641,35 +641,35 @@ class MultiUser
     </div>
       <div class="clear"></div>
       <h3 style="font-size:14px;"><?php i18n(THISFILE_UM.'/PERMISSIONS'); ?></h3>
-             <div class="perm_div"><label for="Pages"><?php i18n(THISFILE_UM.'/PAGES'); ?></label>
+             <div class="perm_div"><label for="Pages"><?php echo strip_tags(i18n_r('TAB_PAGES')); ?></label>
                              <input type="checkbox" id="Pages" name="Pages" value="no" />
                              </div>
 
-                             <div class="perm_div"><label for="Files"><?php i18n(THISFILE_UM.'/FILES'); ?></label>
+                             <div class="perm_div"><label for="Files"><?php echo strip_tags(i18n_r('TAB_FILES')); ?></label>
                              <input type="checkbox" id="Files" name="Files" value="no" />
                              </div>
 
-                             <div class="perm_div"><label for="Theme"><?php i18n(THISFILE_UM.'/THEME'); ?></label>
+                             <div class="perm_div"><label for="Theme"><?php echo strip_tags(i18n_r('TAB_THEME')); ?></label>
                              <input type="checkbox" id="Theme" name="Theme" value="no" />
                              </div>
 
-                             <div class="perm_div"><label for="Plugins"><?php i18n(THISFILE_UM.'/PLUGINS'); ?></label>
+                             <div class="perm_div"><label for="Plugins"><?php echo strip_tags(i18n_r('PLUGINS_NAV')); ?></label>
                              <input type="checkbox" id="Plugins" name="Plugins" value="no" />
                              </div>
 
-                             <div class="perm_div"><label for="Backups"><?php i18n(THISFILE_UM.'/BACKUPS'); ?></label>
+                             <div class="perm_div"><label for="Backups"><?php echo strip_tags(i18n_r('TAB_BACKUPS')); ?></label>
                              <input type="checkbox" id="Backups" name="Backups" value="no" />
                              </div>
 
-                             <div class="perm_div"><label for="Settings"><?php i18n(THISFILE_UM.'/SETTINGS'); ?></label>
+                             <div class="perm_div"><label for="Settings"><?php echo strip_tags(i18n_r('TAB_SETTINGS')); ?></label>
                              <input type="checkbox" id="Settings" name="Settings" value="no" />
                              </div>
 
-                             <div class="perm_div"><label for="Support"><?php i18n(THISFILE_UM.'/SUPPORT'); ?></label>
+                             <div class="perm_div"><label for="Support"><?php i18n('SUPPORT'); ?></label>
                              <input type="checkbox" id="Support" name="Support" value="no" />
                              </div>
 
-                             <div class="perm_div"><label for="Edit"><?php i18n(THISFILE_UM.'/EDIT'); ?></label>
+                             <div class="perm_div"><label for="Edit"><?php i18n('EDIT'); ?></label>
                              <input type="checkbox" id="Edit" name="Edit" value="no" />
                              </div>
                              <div style="clear:both"></div>
@@ -678,14 +678,14 @@ class MultiUser
                              <a href="#" title="<?php i18n(THISFILE_UM.'/CUSTOM_TITLE'); ?>">?</a></label>
                              <select name="Landing" id="userland" class="text">
                               <option value="" selected="selected"></option>
-						      <option value="pages.php"><?php i18n(THISFILE_UM.'/PAGES'); ?></option>
-                              <option value="theme.php"><?php i18n(THISFILE_UM.'/THEME'); ?></option>
-                              <option value="settings.php"><?php i18n(THISFILE_UM.'/SETTINGS'); ?></option>
-                              <option value="support.php"><?php i18n(THISFILE_UM.'/SUPPORT'); ?></option>
-                              <option value="edit.php"><?php i18n(THISFILE_UM.'/EDIT'); ?></option>
-                              <option value="plugins.php"><?php i18n(THISFILE_UM.'/PLUGINS'); ?></option>
-                              <option value="upload.php"><?php i18n(THISFILE_UM.'/UPLOAD'); ?></option>
-                              <option value="backups.php"><?php i18n(THISFILE_UM.'/BACKUPS'); ?></option>
+						      <option value="pages.php"><?php echo strip_tags(i18n_r('TAB_PAGES')); ?></option>
+                              <option value="theme.php"><?php echo strip_tags(i18n_r('TAB_THEME')); ?></option>
+                              <option value="settings.php"><?php echo strip_tags(i18n_r('TAB_SETTINGS')); ?></option>
+                              <option value="support.php"><?php i18n('SUPPORT'); ?></option>
+                              <option value="edit.php"><?php i18n('EDIT'); ?></option>
+                              <option value="plugins.php"><?php echo strip_tags(i18n_r('PLUGINS_NAV')); ?></option>
+                              <option value="upload.php"><?php echo strip_tags(i18n_r('TAB_FILES')); ?></option>
+                              <option value="backups.php"><?php echo strip_tags(i18n_r('TAB_BACKUPS')); ?></option>
 						      </select>
                              </div>
 
@@ -1036,7 +1036,7 @@ class MultiUser
 					if ($success){
 					  echo '<div class="updated">', $pluginname, i18n_r(THISFILE_UM.'/UPDATE_SUCCESS'), '</div>';
 					}
-					else{
+					else {
 					  echo "<div class=\"updated\">", i18n_r(THISFILE_UM.'/UPDATE_ERROR'), "</div>";
 					}
 			$this->mmManageUsersForm();

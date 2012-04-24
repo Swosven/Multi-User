@@ -15,19 +15,11 @@ $i18n = array(
 	'UNABLE_OPEN' 			=> "Unable to open ",
 	'UPDATE_PLUGINQ' 		=> "Are You Sure You Want To Update This Plugin?", // javascript, no "'"
 	'UPDATE_PLUGIN' 		=> "Update This Plugin",
-	'PAGES' 				=> "Pages",
-	'EDIT' 					=> "Edit",
 	'HIDE' 					=> "Hide",
 	'PASSWORD' 				=> "Password:",
 	'LANGUAGE' 				=> "Language:",
 	'TIMEZONE' 				=> "Timezone:",
 	'PERMISSIONS' 			=> "Permissions (<strong>Check Areas</strong> You Would Like <strong>To Block</strong> Access To)",
-	'FILES' 				=> "Files",
-	'THEME' 				=> "Theme",
-	'PLUGINS' 				=> "Plugins",
-	'BACKUPS' 				=> "Backups",
-	'UPLOAD' 				=> "Upload",
-	'SETTINGS' 				=> "Settings",
 	'CUSTOM_LABEL' 			=> "Custom Landing Page (Optional)",
 	'CUSTOM_TITLE' 			=> "This is where you can set an alternate landing page the user will arrive at upon logging in", // no '"'
 	'DISABLE_ACCESS' 		=> "Disable Admin Access (Cannot Manage Users)",
@@ -48,15 +40,6 @@ $i18n = array(
 	
 	// from admin/lang 
 	// /!\ no "'"
-	/*
-	"GENERAL_SETTINGS"		=>	"General Settings",
-	"BAK_MANAGEMENT"		=>	"Backup Management",
-	"PLUGINS_MANAGEMENT"	=> "Plugin Management",
-	"PAGE_MANAGEMENT"		=>	"Page Management",
-	"SUPPORT" 				=> 	"Support",
-	"FILE_MANAGEMENT"		=>	"File Management",
-	"THEME_MANAGEMENT" 		=> 	"Theme Management",
-	*/
 	"SIDE_CREATE_NEW"		=>	"reate New Page", // minus "<em>C</em>"
 );
 
